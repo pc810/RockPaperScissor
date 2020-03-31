@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.6/gsap.min.js"></script>
+
+  <title>Frontend Mentor | Rock, Paper, Scissors</title>
+
+  <!-- Score
+  Rules
+
+  You Picked
+  The House Picked
+
+  You Win
+  You Lose
+
+  Play Again -->  
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;600;700&display=swap');
+
+    .attribution { font-size: 11px; text-align: center; }
+    .attribution a { color: hsl(228, 45%, 44%); }
+    body{
+      margin:0;
+      padding:0;
+      background-image:  radial-gradient(circle at 50% 0%, hsl(214, 47%, 23%) , hsl(237, 49%, 15%));
+      height: 100vh;
+      overflow: hidden;
+    }
+    .container{      
+      width: 80%;
+      margin: 0 auto;      
+
+    }
+    .border-container{
+      border: 2px solid hsl(217, 16%, 45%);
+      border-radius: 1.1em;
+      padding: 1.4em 1.4em 1.4em 2.3em;
+      margin-top: 2em;
+      overflow: hidden;
+
+    }
+    .logo{
+      margin-top: 1em;
+      transform: scale(1.1);
+    }
+    .score-container{
+      float: right;
+      background-color: white;
+      border-radius: 0.6em;
+      text-align: center;
+      padding: 1em 3em 0.5em 3em; 
+      width: 50px;     
+
+    }
+    .score-container > h4 {
+      color: hsl(229, 64%, 46%);
+      font-size: 1em;           
+      margin: 5px 0px 0px 0px;
+      letter-spacing: 0.1em;       
+      font-family: 'Barlow Semi Condensed', sans-serif;
+    }
+    .score-container > h1{
+      color: hsl(229, 25%, 31%);
+      font-weight: 800;
+      margin: 0px;
+      transform: translateY(-8px);
+      font-size: 4.5em;      
+      font-family: 'Barlow Semi Condensed', sans-serif;
+    }
+    .play-container{
+      width: 100%;
+      display: grid;      
+      margin: 0 auto;
+    }
+    .tri-container{      
+      text-align: center;
+      /* background-color: aqua; */
+      position: relative;  
+      width: 450px;
+      height: 400px;   
+      margin: 5em auto;       
+      /* transform: translate(50%, 0%); */
+    }
+    .circle{
+      width: 150px;
+      height: 150px;
+      position: absolute;
+      border-radius: 100px;
+      background-color: white;      
+      cursor: pointer;
+    }
+    .c1{            
+      top: 0;           
+      border: 20px solid #5671F5;
+      box-shadow: 0px 6px 0 3px #4865F4, 0px 16px 5px rgba(0, 0, 0, 0.17), 0px 8px rgba(1, 1, 1, 0.25) inset;
+      background-image: url("./images/icon-paper.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 70px;
+    }  
+    .c2{
+      right: 0;
+      top: 0;
+      border: 20px solid #ECA922;
+      /* ECA922 */
+      /* EC9E0E */
+      box-shadow: 0px 6px 0 3px #EC9E0E, 0px 16px 5px rgba(0, 0, 0, 0.17), 0px 8px rgba(1, 1, 1, 0.25) inset;
+      background-image: url("./images/icon-scissors.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 70px;
+    }
+    .c3{      
+      bottom: 0;
+      left: calc(50% - 100px);
+      border: 20px solid #DD405D;
+      /* DD405D */
+      /* DC2E4E */
+      box-shadow: 0px 6px 0 3px #DC2E4E, 0px 16px 5px rgba(0, 0, 0, 0.17), 0px 8px rgba(1, 1, 1, 0.25) inset;
+      background-image: url("./images/icon-rock.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 70px;
+    }
+    .triangle
+    {
+      position: relative;
+      top: 60px;
+    }    
+    .pick-container{
+      margin-top: 3em;      
+      width: 100%;    
+    }
+    .heading-grid{
+      display: grid;      
+      grid-template-columns: auto auto auto;
+      grid-gap: 30px;    
+      text-align: center;
+    }
+    .heading-grid > div > h3{
+      font-family: 'Barlow Semi Condensed', sans-serif;
+      color: white;
+      letter-spacing: 2px;
+    }
+    .circle-container{
+      justify-self: center;
+      width: 300px;
+      height: 300px;      
+      border-radius: 150px;      
+    }
+    .large-circle{      
+      height: 240px;      
+      background-color: white;      
+      border-radius: 150px;
+    }
+    .large-empty{      
+      height: 300px;      
+      background-color: rgba(0, 0, 0, 0.116);      
+      border-radius: 150px;
+    }
+    .large-paper{
+      border: 30px solid #5671F5;
+      background-image: url("./images/icon-paper.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100px;
+      box-shadow: 0px 6px 0 3px #4865F4, 0px 16px 5px rgba(0, 0, 0, 0.17), 0px 8px rgba(1, 1, 1, 0.25) inset;
+    }
+    .large-rock{  
+      background-image: url("./images/icon-rock.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100px;
+      border: 30px solid #DD405D;
+      box-shadow: 0px 6px 0 3px #DC2E4E, 0px 16px 5px rgba(0, 0, 0, 0.17), 0px 8px rgba(1, 1, 1, 0.25) inset;    
+    }
+    .large-scissors{
+      background-image: url("./images/icon-scissors.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100px;
+      border: 30px solid #ECA922;
+      box-shadow: 0px 6px 0 3px #EC9E0E, 0px 16px 5px rgba(0, 0, 0, 0.17), 0px 8px rgba(1, 1, 1, 0.25) inset;
+    }    
+    .result{
+    height: 100%;
+    
+  } 
+  .result > h1{
+    font-size: 4em;      
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    text-transform: uppercase;
+    color: white;
+  }
+  .btn{
+    cursor: pointer;
+    background-color: white;
+    height:40px;
+    border-radius: 10px;
+    padding-top: 15px;
+    color: #DD405D;
+    font-size: 1.3em;      
+    font-weight: 600;
+    letter-spacing: 3px;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    text-transform: uppercase;
+  }  
+  .r1{
+    position:absolute;
+    width: 400px;
+    height: 400px;
+    border-radius:200px;
+    background-color: rgba(255, 255, 255, 0.1);
+    z-index:-1;
+    transform: translate(-20%,-20%);
+  }
+  .r2{
+    position:absolute;
+    width: 500px;
+    height: 500px;
+    border-radius:250px;
+    background-color: rgba(255, 255, 255, 0.05);
+    z-index:-1;
+    transform: translate(-25%,-25%);
+  }
+  .r3{
+    position:absolute;
+    width: 600px;
+    height: 600px;
+    border-radius:300px;
+    background-color: rgba(255, 255, 255, 0.025);
+    z-index:-1;
+    transform: translate(-30%,-30%);
+  }
+  .rules{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 0px 3em;      
+    border: 2px solid hsl(217, 16%, 45%);
+    border-radius: 0.5em;
+    cursor: pointer;
+  }
+  .rules > h4{
+    text-transform: uppercase;
+    font-size: 0.9em;
+    letter-spacing: 5px;
+    margin: 1em 0.5em;
+    color: white;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+  }
+  .modal{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    display: none;
+    background-color: hsla(0, 0%, 8%, 0.651);    
+  }
+  .close{
+    float: right;
+    padding-top: 5px;
+    cursor: pointer;
+  }
+  .content{
+    background-color: white;
+    width: 40%;
+    margin: 0 auto;
+    padding: 2em;  
+    margin-top: 6em;
+    /* text-align: center; */
+  }
+  .header > span{
+    color: hsl(229, 25%, 31%);
+    font-size: 1.5em;    
+    font-family: 'Barlow Semi Condensed', sans-serif;
+  }
+  .rules-img{
+    padding-top: 5em;
+  }
+    @media only screen and (max-width: 680px) {
+      .container{
+      width: 80%;
+      margin: 0 auto;      
+    }
+    .border-container{                  
+      padding: 1em 0.4em 0em 0em;       
+      margin: 3em auto;
+      width: 100%;
+      overflow: auto;
+      border-radius: 8px;
+    }
+    .logo{
+      margin-top: 0em;
+      transform: scale(0.6) translateY(-7px) translateX(-16px);
+    }
+    .score-container{
+      padding: 0.5em 1.5em 0.25em 1.5em;      
+      margin-right: 5px;
+      border-radius: 7px;
+    }
+    .score-container > h4 {
+      font-size: 0.8em;           
+      margin: 5px 0px 0px 0px;
+      letter-spacing: 0.1em;       
+      font-family: 'Barlow Semi Condensed', sans-serif;
+    }
+    .score-container > h1{
+      margin: 0px;
+      transform: translateY(-5px);
+      font-size: 2.8em;      
+      font-family: 'Barlow Semi Condensed', sans-serif;
+    }    
+    
+    .play-container{
+      /* width: 90%; */
+      margin: 0 auto;
+      
+    }    
+    .triangle{
+      transform: scale(0.7);
+      top: 30px;
+    }
+    .circle{
+      width: 90px;
+      height: 90px;
+      position: absolute;
+      border-radius: 100px;      
+    }
+    .tri-container{
+      width: 310px;
+      height: 300px;
+    }
+    .c1,.c2,.c3{
+      background-size: 50px;
+    }
+    .c3{
+      left: calc(50% - 65px);      
+    }
+
+    .circle-container{
+      width: 150px;
+      height: 150px;      
+      border-radius: 75px;      
+    }
+    .large-circle{      
+      height: 120px;            
+      border-radius: 75px;
+    }
+    .large-empty{      
+      height: 150px;      
+      border-radius: 75px;
+    }
+    .large-paper{
+      border: 15px solid #5671F5; 
+      background-size: 50px;      
+    }
+    .large-rock{  
+      background-size: 50px;
+      border: 15px solid #DD405D;      
+    }
+    .large-scissors{
+      background-size: 50px;
+      border: 15px solid #ECA922;      
+    }    
+    .play-container > div > div > div:nth-child(1){
+      order: 1;
+    }
+    .play-container > div > div > div:nth-child(2){
+      display: none;
+    }
+    .play-container > div > div > div:nth-child(3){
+      order: 2;
+    }
+    .play-container > div > div > div:nth-child(4){
+      order: 4;
+    }
+    .play-container > div > div > div:nth-child(5){
+      order: 5;
+      grid-column : span 2;
+    }
+    .play-container > div > div > div:nth-child(6){
+      order: 4; 
+    }
+    .heading-grid{
+      grid-template-columns: auto auto;
+    }
+    .pick-container{
+      margin-top: 0;
+    }
+    .result > h1{
+      font-size: 2em;      
+    }
+    .btn{
+      font-size: 1em;
+    }
+    .r1{
+      width: 200px;
+      height: 200px;
+      border-radius: 100px;
+      transform: translate(-21%,-18%);
+    }
+    .r2{
+      width: 250px;
+      height: 250px;
+      border-radius: 125px;
+      transform: translate(-25%,-25%);
+    }
+    .r3{
+      width: 300px;
+      height: 300px;
+      border-radius: 150px;
+      transform: translate(-30%,-30%);
+    }
+    .rules{
+    bottom: 20px;
+    right: 20px;
+    padding: 0px 1.5em;      
+    border-radius: 0.5em;    
+  }
+  .rules > h4{
+    font-size: 0.9em;
+    letter-spacing: 5px;
+    margin: 1em 0.5em;    
+    }
+    .content{
+    background-color: white;    
+    margin: 0 auto;
+    padding: 3em;         
+    width: 80%;
+    }
+    .modal{
+    width: 100%;
+    height: 100%;
+    background-color:white;
+  }
+  }    
+
+  .circle:hover{
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+ 
+  </style>
+  <script>
+   function rulesClick(){
+      document.getElementById("modal").style.display = "block";
+    }
+    function closeClick(){
+      document.getElementById("modal").style.display = "none";
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="border-container">
+      <img src="./images/logo.svg" alt="Rock Paper Scissors" class="logo"/>
+      <div class="score-container">
+        <h4>SCORE</h4>
+        <h1 id="score">0</h1>
+      </div>
+    </div>
+    <div class="play-container">
+        <div class="tri-container" id="user-input-container" style="display:block">
+            <img src="./images/bg-triangle.svg" alt="triangle" class="triangle">
+            <div class="circle c1" id="Paper"></div>
+            <div class="circle c2" id="Scissors"></div>
+            <div class="circle c3" id="Rock"></div>
+        </div>
+        <!-- <div class="pick-container">
+          <div class="heading-grid">
+            <div><h3>YOU PICKED</h3></div>
+            <div><h3>THE HOUSE PICKED</h3></div>            
+            <div class="circle-container">
+              <div class="large-circle large-scissors"></div>
+            </div>
+            <div class="circle-container">
+              <div class="large-circle large-empty"></div>
+            </div>
+          </div>                
+        </div> -->
+        <div class="pick-container" id="pick-container" style="display:none">
+          <div class="heading-grid">
+            <div><h3>YOU PICKED</h3></div>
+            <div><h3></h3></div>            
+            <div><h3>THE HOUSE PICKED</h3></div>            
+            <div class="circle-container">              
+              <div class="large-circle " id="user-selection">                
+                <div class="r1">&nbsp;</div>
+                <div class="r2">&nbsp;</div>
+                <div class="r3">&nbsp;</div>
+              </div>              
+            </div>            
+            <div class="circle-container">
+                <div class="result">
+                    <h1 id="resulttext">YOU LOSE</h1>
+                    <div class="btn" id="btn">
+                      PLAY AGAIN
+                    </div>
+                </div>
+            </div>            
+            <div class="circle-container">
+              <div class="large-circle large-empty" id="machine-selection"></div>
+            </div>            
+          </div>                
+        </div>
+    </div>
+    <div class="rules" id="rules" onclick="rulesClick()">
+      <h4>Rules</h4>
+    </div>    
+  </div>
+  <div class="modal" id="modal">
+    <div class="content">
+      <div class="header">
+        <span>RULES</span>        
+        <div class="close" id="close" onclick="closeClick()"><img src="./images/icon-close.svg" alt="X" /></div>      
+      </div>
+      <div style="text-align:center;">
+      <img src="./images/image-rules.svg" alt="rules" class="rules-img"/>
+      </div>      
+    </div>    
+  </div>
+  <!-- <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="#">Priyank Kumar Chaudhari</a>.
+  </div> -->
+  <script>
+    var cnt = 0;
+    
+    // 0 = user input
+    // 1 = machine turn
+    // 2 = u loose
+    // 3 = u win 
+    // 4 = tie
+    // 5 = again 
+
+    var state = 0;    
+    var actions = ['r','p','s'];
+    var machineChoose = null;
+    var ripple = gsap.timeline({repeat: -1, repeatDelay: 0});
+    ripple.from('.r1', {opacity:0, duration:0.5,ease:'Circ.easeOut'})
+    ripple.from('.r2', {opacity:0.1, duration:0.4,ease:'Circ.easeOut'})
+    ripple.from('.r3', {opacity:0.1, duration:0.4,ease:'Circ.easeOut'})
+    ripple.pause();   
+    function reset(){
+      document.getElementById("user-input-container").style.display="block"
+      document.getElementById("pick-container").style.opacity="0";
+      //document.getElementById("score").innerHTML = "0";
+      document.getElementById("resulttext").innerHTML = "";
+      document.getElementById("btn").style.display = "none";
+      document.getElementById("user-selection").className = "large-circle";   
+      document.getElementById("machine-selection").className = "large-circle large-empty";
+      ripple.pause();   
+      state = 0;  
+    }    
+    function manageState(s){
+      console.log("state", s);      
+      switch (s) {
+        case 0:
+          document.getElementById("user-input-container").style.display="block";
+          document.getElementById("pick-container").style.display= "none";
+          break;      
+        case 1:          
+          let t2 = gsap.timeline({repeat: 0, repeatDelay: 0});
+          t2.to('.tri-container', {opacity:0,duration:0.5,ease:'Circ.easeOut'});
+          t2.to('.tri-container', {display:'none',duration:0.1,ease:'Circ.easeOut'});
+          t2.to('.pick-container', {opacity:1, display:'block',duration:0.5,ease:'Circ.easeOut'});
+          break;      
+        case 2:
+          cnt--;
+          document.getElementById("score").innerHTML = cnt;      
+          document.getElementById("resulttext").innerHTML = "YOU LOSE";          
+          document.getElementById("btn").style.display = "block";
+          break;      
+        case 3:
+          cnt++;
+          document.getElementById("score").innerHTML = cnt;      
+          document.getElementById("resulttext").innerHTML = "YOU WIN";
+          document.getElementById("btn").style.display = "block";
+          ripple.play();
+          break;      
+        case 4:
+          document.getElementById("resulttext").innerHTML = "MATCH TIE";
+          document.getElementById("btn").style.display = "block";
+          break;      
+        case 5:
+        let t3 = gsap.timeline({repeat: 0, repeatDelay: 0});
+          t3.to('.pick-container', {display:'none',duration:0.5,ease:'Circ.easeOut'});
+          t3.to('.tri-container', {display:'block',duration:0.1,ease:'Circ.easeOut'});          
+          t3.to('.tri-container', {opacity:1,duration:0.5,ease:'Circ.easeOut'});          
+          reset();
+          break;
+        default:
+          break;
+      }
+    }
+    function useraction(action){
+
+      console.log('action', action);            
+      var us = document.getElementById("user-selection");      
+      let i = Math.floor(Math.random() * 3);      
+      machineChoose = actions[i];
+      console.log('machine' , machineChoose)
+      switch (action) {
+        case 'r':
+          console.log("u choose rock");
+          state = 1;        
+          us.classList.add("large-rock");  
+          manageState(state);
+          if(machineChoose == 's')          
+            state = 3;        
+          else if(machineChoose == 'r')          
+            state = 4;          
+          else
+            state = 2;                  
+          break;
+        case 'p':
+        console.log("u choose paper");
+          state = 1;        
+          us.classList.add("large-paper");  
+          manageState(state);
+          if(machineChoose == 'r')          
+            state = 3;        
+          else if(machineChoose == 'p')          
+            state = 4;          
+          else
+            state = 2;                    
+          break;          
+        case 's':
+        console.log("u choose scissors");
+          state = 1;        
+          us.classList.add("large-scissors");  
+          manageState(state);
+          if(machineChoose == 'p')          
+            state = 3;        
+          else if(machineChoose == 's')          
+            state = 4;          
+          else
+            state = 2;                    
+          break;        
+        default:
+          break;
+      }
+      setTimeout(function(){        
+        //let ms = document.getElementById("machine-selection");        
+        console.log('classname', document.getElementById("machine-selection").className);
+        console.log(machineChoose);
+        switch (machineChoose) {
+          case 'r':
+            document.getElementById("machine-selection").classList.remove("large-empty");
+            document.getElementById("machine-selection").classList.add("large-rock");
+            console.log('classname after', document.getElementById("machine-selection").className);
+            break;        
+          case 'p':
+            document.getElementById("machine-selection").classList.remove("large-empty");
+            document.getElementById("machine-selection").classList.add("large-paper");
+            console.log('classname after', document.getElementById("machine-selection").className);
+            break;        
+          case 's':           
+            document.getElementById("machine-selection").classList.remove("large-empty");
+            document.getElementById("machine-selection").classList.add("large-scissors");
+            console.log('classname after', document.getElementById("machine-selection").className);
+            break;        
+          default:
+            break;
+        }        
+        manageState(state)
+        }, 2000);
+    }
+
+    var r = document.getElementById("Rock");
+    var p = document.getElementById("Paper");
+    var s = document.getElementById("Scissors");
+    var btn = document.getElementById("btn");
+    var closebtn = document.getElementById("close");    
+    var rules = document.getElementById("rules");    
+    btn.onclick = function(){manageState(5);ripple.clear();ripple = gsap.timeline({repeat: -1, repeatDelay: 0});
+  //  rules.onclick = function(){rulesClick();};
+ //   closebtn.onclick = function(){closeClick();};    
+    ripple.from('.r1', {opacity:0, duration:0.5,ease:'Circ.easeOut'})
+    ripple.from('.r2', {opacity:0.1, duration:0.4,ease:'Circ.easeOut'})
+    ripple.from('.r3', {opacity:0.1, duration:0.4,ease:'Circ.easeOut'})
+    ripple.pause();
+    }
+    r.onclick = function(){useraction('r')};
+    p.onclick = function(){useraction('p')};
+    s.onclick = function(){useraction('s')};    
+    reset();
+    
+  </script>  
+</body>
+</html>
